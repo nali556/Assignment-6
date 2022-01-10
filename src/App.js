@@ -7,11 +7,12 @@ function App() {
   const [posts, setPosts] = useState([])
 
   // call API
-  const fetchPost = async () => {
-    const response = await axios("http://ctp-zip-api.herokuapp.com/zip/10010")
+  const fetchPost = async (e) => {
+    e.preventDefault()
+    console.log(e.target.zip.value)
+    const response = await axios("http://ctp-zip-api.herokuapp.com/zip/" + e.target.zip.value)
     console.log(response.data)
     setPosts(response.data)
-
   }
 
   useEffect(() => {
@@ -20,11 +21,19 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Hello world</h1>
+      <form onSubmit={fetchPost}>
+        <label for="zip">Zip Code</label>
+        <input type="text" id="zip" name="zip"></input> <br></br>
+        <input type="submit" value="Submit"></input>
+      </form>
       <p>{posts.map(element => {
         console.log(element.City)
+        return(
+          <p>{element.City}</p>
+        )
       })}</p>
-      <button onClick={fetchPost}>Click to get a new joke</button>
+      
+      <button>Click to get a random zip code</button>
     </div>
   );
 }
