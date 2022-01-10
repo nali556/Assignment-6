@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from 'axios'
+import "./App.css"
 
 
 function App() {
 
   const [posts, setPosts] = useState([])
-
+  const [postsCity, setPostsCity] = useState([])
   // call API
   const fetchPost = async (e) => {
     e.preventDefault()
-    console.log(e.target.zip.value)
     const response = await axios("http://ctp-zip-api.herokuapp.com/zip/" + e.target.zip.value)
-    console.log(response.data)
     setPosts(response.data)
   }
+  const fetchPostCity = async (e) => {
+    e.preventDefault()
+    const response = await axios("http://ctp-zip-api.herokuapp.com/city/" + e.target.city.value)
+    setPostsCity(response.data)
+    console.log(postsCity)
+  }
 
-  useEffect(() => {
-    fetchPost()
-  }, [])
 
   return (
     <div className="App">
@@ -26,12 +28,23 @@ function App() {
         <input type="text" id="zip" name="zip"></input> <br></br>
         <input type="submit" value="Submit"></input>
       </form>
-      <p>{posts.map(element => {
-        console.log(element.City)
+      {posts.map((element,key) => {
         return(
-          <p>{element.City}</p>
+          <p key={key}>{element.City}</p>
         )
-      })}</p>
+      })}
+
+      <form onSubmit={fetchPostCity}>
+        <label for="city">City Name</label>
+        <input type="text" id="city" name="city"></input> <br></br>
+        <input type="submit" value="Submit"></input>
+      </form>
+      
+      {postsCity.map((element,key) => {
+        return(
+          <p key={key}>{element}</p>
+        )
+      })}
       
       <button>Click to get a random zip code</button>
     </div>
